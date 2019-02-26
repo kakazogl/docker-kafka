@@ -20,7 +20,7 @@ RUN apt-get update && \
     ca-certificates
 
 # Download Kafka binary distribution
-ADD http://apache-mirror.rbc.ru/pub/apache/kafka/${KAFKA_VERSION}/${KAFKA_RELEASE_ARCHIVE}.tgz /tmp/
+ADD http://apache-mirror.rbc.ru/pub/apache/kafka/${KAFKA_VERSION}/${KAFKA_RELEASE_ARCHIVE} /tmp/
 
 WORKDIR /tmp
 
