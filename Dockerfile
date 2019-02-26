@@ -20,15 +20,9 @@ RUN apt-get update && \
     ca-certificates
 
 # Download Kafka binary distribution
-ADD http://www.us.apache.org/dist/kafka/${KAFKA_VERSION}/${KAFKA_RELEASE_ARCHIVE} /tmp/
-ADD https://dist.apache.org/repos/dist/release/kafka/${KAFKA_VERSION}/${KAFKA_RELEASE_ARCHIVE}.md5 /tmp/
+ADD http://apache-mirror.rbc.ru/pub/apache/kafka/2.1.1/kafka_2.12-2.1.1.tgz /tmp/
 
 WORKDIR /tmp
-
-# Check artifact digest integrity
-RUN echo VERIFY CHECKSUM: && \
-  gpg --print-md MD5 ${KAFKA_RELEASE_ARCHIVE} 2>/dev/null && \
-  cat ${KAFKA_RELEASE_ARCHIVE}.md5
 
 # Install Kafka to /kafka
 RUN tar -zx -C /kafka --strip-components=1 -f ${KAFKA_RELEASE_ARCHIVE} && \
@@ -50,4 +44,3 @@ EXPOSE 9092 ${JMX_PORT}
 VOLUME [ "/data", "/logs" ]
 
 CMD ["/start.sh"]
-
