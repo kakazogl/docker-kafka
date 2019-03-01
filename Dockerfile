@@ -1,39 +1,25 @@
-# Builds an image for Apache Kafka from binary distribution.
-#
-# The netflixoss/java base image runs Oracle Java 8 installed atop the
-# ubuntu:trusty (14.04) official image. Docker's official java images are
-# OpenJDK-only currently, and the Kafka project, Confluent, and most other
-# major Java projects test and recommend Oracle Java for production for optimal
-# performance.
+## Apache Kafka distribution with Scala 2.12
+## Fork from ches/kafka
 
-FROM netflixoss/java:8
+FROM java:openjdk-8-jdk-alpine
 MAINTAINER Iurii Karakosov <y.karakosov@gmail.com>
 
 # The Scala 2.12 build is currently recommended by the project.
-ENV KAFKA_VERSION=2.1.1 KAFKA_SCALA_VERSION=2.12 JMX_PORT=7203 KAFKA_RELEASE_ARCHIVE=kafka_${KAFKA_SCALA_VERSION}-${KAFKA_VERSION}.tgz
-
-RUN mkdir /kafka /data /logs && apt-get update && apt-get install -y ca-certificates
+ENV KAFKA_VERSION=2.1.1 KAFKA_SCALA_VERSION=2.12 JMX_PORT=7203
+ENV KAFKA_RELEASE_ARCHIVE=kafka_${KAFKA_SCALA_VERSION}-${KAFKA_VERSION}
 
 # Download Kafka binary distribution
-ADD http://apache-mirror.rbc.ru/pub/apache/kafka/${KAFKA_VERSION}/${KAFKA_RELEASE_ARCHIVE} /tmp/
-
-WORKDIR /tmp
+ADD http://apache-mirror.rbc.ru/pub/apache/kafka/${KAFKA_VERSION}/${KAFKA_RELEASE_ARCHIVE}.tgz /
 
 # Install Kafka to /kafka
-RUN tar -zx -C /kafka --strip-components=1 -f ${KAFKA_RELEASE_ARCHIVE} && \
-  rm -rf kafka_*
 
-ADD config /kafka/config
-ADD start.sh /start.sh
+RUN mkdir /kafka /data /log && apk add --no-cache bash
+RUN tar -xf ${KAFKA_RELEASE_ARCHIVE}.tgz -C / && mv /${KAFKA_RELEASE_ARCHIVE}/* /kafka/
 
-# Set up a user to run Kafka
-RUN groupadd kafka && \
-  useradd -d /kafka -g kafka -s /bin/false kafka && \
-  chown -R kafka:kafka /kafka /data /logs
+COPY config /kafka/config
+COPY start.sh /start.sh
 
-USER kafka
 ENV PATH /kafka/bin:$PATH
-WORKDIR /kafka
 
 # broker, jmx
 EXPOSE 9092 ${JMX_PORT}
