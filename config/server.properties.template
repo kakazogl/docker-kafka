@@ -27,7 +27,10 @@ default.replication.factor={{KAFKA_DEFAULT_REPLICATION_FACTOR}}
 # Hostname the broker will advertise to consumers. If not set, kafka will use the value returned
 # from InetAddress.getLocalHost().  If there are multiple interfaces getLocalHost
 # may not be what you want.
+
 advertised.host.name={{KAFKA_ADVERTISED_HOST_NAME}}
+listener.security.protocol.map={{KAFKA_LISTENER_PROTOCOL_MAP}}
+inter.broker.listener.name={{KAFKA_INTER_BROKER_LISTENER}}
 
 # Enable topic deletion
 delete.topic.enable={{KAFKA_DELETE_TOPIC_ENABLE}}
