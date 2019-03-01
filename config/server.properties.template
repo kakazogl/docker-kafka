@@ -28,18 +28,14 @@ default.replication.factor={{KAFKA_DEFAULT_REPLICATION_FACTOR}}
 # from InetAddress.getLocalHost().  If there are multiple interfaces getLocalHost
 # may not be what you want.
 
-advertised.host.name={{KAFKA_ADVERTISED_HOST_NAME}}
+listeners={{KAFKA_LISTENERS}}
+advertised.listeners={{KAFKA_ADVERTISED_LISTENERS}}
 listener.security.protocol.map={{KAFKA_LISTENER_PROTOCOL_MAP}}
 inter.broker.listener.name={{KAFKA_INTER_BROKER_LISTENER}}
 
 # Enable topic deletion
 delete.topic.enable={{KAFKA_DELETE_TOPIC_ENABLE}}
 
-############################# Socket Server Settings #############################
-
-# The port the socket server listens on
-port={{KAFKA_PORT}}
-advertised.port={{KAFKA_ADVERTISED_PORT}}
 
 ############################# Log Basics #############################
 
